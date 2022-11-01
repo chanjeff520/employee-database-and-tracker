@@ -1,8 +1,10 @@
 
-
+const inquirer = require("inquirer");
+const { default: Choices } = require("inquirer/lib/objects/choices");
 const mysql = require("mysql2");
 const { last } = require("rxjs");
 
+//connection to mysql
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -13,6 +15,35 @@ const db = mysql.createConnection(
     },
     console.log('Connected to the employees_db database')
 );
+
+function initalPrompt(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Select your choice",
+            name: "choice",
+            choices: [
+                "View All Departments",
+                "View All Roles",
+                "View All Employees",
+                "Add Department",
+                "Add Role",
+                "Add Employee"
+            ]
+        }
+    ]).then((res) => {
+        switch (val.choice){
+            case "View All Departments": viewAllDepartments();
+            break;
+
+            case "View All Roles": viewAllRoles();
+            break;
+
+            case "View All Employees": viewAllEmployees();
+            break;
+        }
+    });
+}
 
 //view all departments
 function viewAllDepartments(){
@@ -38,9 +69,7 @@ function viewAllRoles(){
 function viewAllEmployees(){
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title AS Job Title, department.name As Department Name, role.salary, CONCAT(e.first_name, ' ', e.last_name) AS Manager
                 FROM employee
-                INNER JOIN role on role.id = employee.role_id
-                INNER JOIN department on department.id = role.department_id
-                LEFT JOIN employee e on employee.manager_id = e.id;`;
+                ;`;
     db.query(sql, (err,res) =>{
         if(err) throw err;
         console.table(res);
