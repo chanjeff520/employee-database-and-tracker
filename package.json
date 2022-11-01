@@ -1,0 +1,25 @@
+{
+  "name": "employee-database-and-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanjeff520/employee-database-and-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chanjeff520/employee-database-and-tracker/issues"
+  },
+  "homepage": "https://github.com/chanjeff520/employee-database-and-tracker#readme",
+  "dependencies": {
+    "inquirer": "^9.1.4",
+    "mysql2": "^2.3.3"
+  }
+}
