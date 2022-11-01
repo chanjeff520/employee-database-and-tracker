@@ -34,13 +34,22 @@ function initalPrompt(){
     ]).then((res) => {
         switch (val.choice){
             case "View All Departments": viewAllDepartments();
-            break;
+                break;
 
             case "View All Roles": viewAllRoles();
-            break;
+                break;
 
             case "View All Employees": viewAllEmployees();
-            break;
+                break;
+
+            case "Add Department": addDepartment();
+                break;
+
+            case "Add Role": addRole();
+                break;
+
+            case "Add Employee": addEmployee();
+                break;
         }
     });
 }
@@ -51,7 +60,8 @@ function viewAllDepartments(){
     db.query(sql, (err, rows) => {
         if(err) throw err;
         console.table(res);
-    })
+    });
+    initalPrompt();
 }
 
 //view all roles
@@ -62,7 +72,8 @@ function viewAllRoles(){
     db.query(sql, (err, res) => {
         if(err) throw err;
         console.table(res);
-    })
+    });
+    initalPrompt();
 }
 
 //view all emloyees
@@ -84,7 +95,7 @@ function addDepartment(newDepartment){
             throw err;
         }
         console.log("New department have been added.");
-    })
+    });
 }
 
 //add a role
@@ -97,7 +108,7 @@ function addRole(title, salary, departmentId){
             throw err;
         }
         console.log("New Role has been added.");
-    })
+    });
 }
 
 //add an empolyee
