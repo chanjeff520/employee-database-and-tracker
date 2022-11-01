@@ -3,7 +3,7 @@ VALUES  ("Accounting and Finance"),
         ("Human Resources"),
         ("Information Systems"),
         ("Marketing"),
-        ("Research and Development"),
+        ("Research and Development");
 
 INSERT INTO role (title, salary, department_id)
 VALUES  ("Salesmen/Saleswomen", 80000, 04),
@@ -21,4 +21,4 @@ VALUES  ("Mr.", "Crab", 07, NULL),
         ("Sarah", "Bo", 06, 01),
         ("Michelle", "Obama", 05, NULL),
         ("Jerome", "Chelette", 03, 01),
-        ("Farley", "Whittles", 02, 01),
+        ("Farley", "Whittles", 02, 01);

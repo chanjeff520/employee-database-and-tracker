@@ -61,7 +61,7 @@ function addDepartment(newDepartment){
 //add a role
 function addRole(title, salary, departmentId){
     const values = title + ", " + salary +", " + departmentId;
-    const sql = 'INSERT INTO role(title, salary, department) VALUES (?);';
+    const sql = 'INSERT INTO role(title, salary, department_id) VALUES (?);';
     db.query(sql, values, (err,res) => {
         if (err){
             console.log("New Department was not added.")
@@ -72,9 +72,9 @@ function addRole(title, salary, departmentId){
 }
 
 //add an empolyee
-function addEmployeee(firstName, LastName, roleId, departmentId){
+function addEmployee(firstName, LastName, roleId, departmentId){
     const values = firstName + ", " + LastName + ", " + roleId + ", " + departmentId;
-    const sql = 'INSERT INTO employee(first_name , last_name, role, department) VALUES (?);';
+    const sql = 'INSERT INTO employee(first_name , last_name, role_id, department_id) VALUES (?);';
     db.query(sql, values, (err,res) => {
         if (err){
             console.log("New Department was not added.")
@@ -84,7 +84,12 @@ function addEmployeee(firstName, LastName, roleId, departmentId){
     });
 }
 
-//update employee roll'
+//update employee role'
+function updateEmployee(roleId){
+    const sql = `SELECT  `
+}
+
+
 
 function intro(){
     console.log(`
