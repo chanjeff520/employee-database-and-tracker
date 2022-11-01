@@ -24,9 +24,9 @@ function viewAllDepartments(){
 
 //view all roles
 function viewAllRoles(){
-    const sql = `SELECT role.title AS Job Title, role.id, role.salary AS Salary
+    const sql = `SELECT role.title AS Job Title, role.id, department.name AS Department Name, role.salary AS Salary
                 FROM role
-                JOIN department ON department.name = department.id;`
+                JOIN department ON role.department = department.id;`
     db.query(sql, (err, rows) => {
         if(err) throw err;
         console.table(res);
@@ -34,7 +34,12 @@ function viewAllRoles(){
 }
 
 //view all emloyees
-
+function viewAllEmployees(){
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title AS Job Title, department.name As Department Name, role.salary, CONCAT(e.first_name, ' ', e.last_name) AS Manager
+                FROM employee
+                INNER JOIN role on role.id = employee.role_id
+                INNER JOIN `
+}
 //add department
 
 //add a role
