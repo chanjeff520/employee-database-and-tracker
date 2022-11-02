@@ -49,7 +49,7 @@ function initalPrompt(){
             case "Add Employee": addEmployee();
                 break;
 
-            case "Update Employee Role": updateEmployees();
+            case "Update Employee Role": updateEmployee();
                 break;
         }
     });
@@ -92,6 +92,7 @@ function viewAllEmployees(){
         initalPrompt();
     });
 };
+
 //add department
 function addDepartment(){
     inquirer.prompt([
@@ -186,10 +187,10 @@ function addEmployee(){
 }
 
 //update employee role'
-function updateEmployee(){
-    // const sql = `SELECT employee.first_name, employee.last_name, role.title 
-    //             FROM employee
-    //             JOIN role On employee.role_id = role.id;`;
+async function updateEmployee(){
+
+    //for the employees
+    let selectedEmployee;
     const sql = `SELECT * FROM employee`
     let employeeList = [];
     db.query(sql, (err,res) => {
@@ -199,80 +200,41 @@ function updateEmployee(){
                 id: employee.id,
             }
         });
-        console.log(employeeList);
-        inquirer.prompt([
+
+        selectedEmployee = inquirer.prompt(
             //question 1: Which employee?
             {
                 type: "list",
                 name: "employeeName",
                 message: "Which employee do you want to his/her role to change to?",
-                choices: () =>{
-                    let nameList = employeeList.map((employee) => {
-                        return employee.name;
-                    });
-                    return nameList;
-                }
-            },
+                choices: employeeList
+            }
+        );
+    })
+
+    //for the roles
+    let selectedRole;
+    let roleList = []
+    db.query('SELECT * FROM role', (err, res) => {
+        roleList = res.map((role) => {
+            return {
+                title: role.title,
+                id: role.id
+            }
+        });
+
+        selectedRole = inquirer.prompt(
             //question 2: What role?
             {
                 type: "list",
                 name: "role",
-                message: "What Role do you want to change that Employee to?",
-                choices: () => {
-                    let roleList = [];
-                    db.query("SELECT * FROM role", (err, res) => {
-                        if(err) throw err;
-                        roleList = res.map((role) => {
-                            return role.title;
-                        });
-                    });
-                    return roleList;
-                }
+                message: "What Role do you want to change the new Employee to?",
+                choices: roleList
             },
-        ])
-        .then((res) => {
-            let roleList = [];
-                db.query("SELECT * FROM role", (err, res) => {
-                    roleList = res.map((role) => {
-                        return role.title;
-                    });
-                    console.log(roleList);
-                    return roleList;
-            });
-            let roleId = roleList.indexOf(res.role) + 1;
-            const sql = `UPDATE employee SET WHERE ?`
-            db.query(sql, {last_name: res.name.split(" ")[1]}, {roleId: roleId}, (err, results) => {
-                console.table(res)
-            })
-        });
-    })
-
-    //list provide list of employee to user if hte user select one,
-    //we can get the employeeid
-    //make a list of the role and show the list to hte user,
-    //user can select a role, then we know about the employe id and role id
-    //update using employee id and role.id
-
-    // inquirer.prompt([
-    //     {
-    //         type: "list",
-
-    //     }
-    // ])
+        ).id
+        console.log(selectedRole)
+    });
 
 }
 
-
-
-function intro(){
-    console.log(`
-    
-    
-    
-    
-    `)
-}
-
-//updateEmployee();
-//addRole();
 initalPrompt();
