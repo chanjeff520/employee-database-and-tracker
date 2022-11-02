@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/chanjeff520/employee-database-and-tracker#readme",
   "dependencies": {
-    "inquirer": "^9.1.4",
+    "inquirer": "^8.2.5",
     "mysql2": "^2.3.3"
   }
 }
