@@ -1,8 +1,6 @@
 
 const inquirer = require("inquirer");
-const { default: Choices } = require("inquirer/lib/objects/choices");
 const mysql = require("mysql2");
-const { last } = require("rxjs");
 
 //connection to mysql
 const db = mysql.createConnection(
@@ -31,7 +29,7 @@ function initalPrompt(){
             ]
         }
     ]).then((res) => {
-        switch (val.choice){
+        switch (res.choice){
             case "View All Departments": viewAllDepartments();
                 break;
 
@@ -92,7 +90,6 @@ function viewAllEmployees(){
 };
 //add department
 function addDepartment(){
-
     inquirer.prompt([
         {
             type: "input",
@@ -115,15 +112,35 @@ function addDepartment(){
 
 //add a role
 function addRole(title, salary, departmentId){
-    const values = title + ", " + salary +", " + departmentId;
-    const sql = 'INSERT INTO role(title, salary, department_id) VALUES (?);';
-    db.query(sql, values, (err,res) => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Input the title of the new Role",
+            name: "title"
+        },
+        {
+            type: "input",
+            message: "Input the salary of the new Role",
+            name: "salary"
+        },
+        {
+            type: "input",
+            message: "Input the DepartmentID of the role",
+            name: "departmentId"
+        }
+    ])
+    .then( (res) => {
+        const sql = `INSERT INTO role(title, salary, department_id) VALUES ("${res.title}", ${res.salary}, ${res.departmentId});`;
+        db.query(sql, (err,res) => {
         if (err){
-            console.log("New Department was not added.")
+            console.log("New Role was not added.")
             throw err;
         }
         console.log("New Role has been added.");
+        initalPrompt();
+        });
     });
+
 }
 
 //add an empolyee
@@ -148,17 +165,64 @@ function addEmployee(firstName, LastName, roleId, departmentId){
 
 //update employee role'
 function updateEmployee(){
-    const sql = 'SELECT * FROM employee';
-    
+    // const sql = `SELECT employee.first_name, employee.last_name, role.title 
+    //             FROM employee
+    //             JOIN role On employee.role_id = role.id;`;
+    const sql = `SELECT * FROM employee`
+    let employeeList = [];
     db.query(sql, (err,res) => {
-        console.log(res);
-        const employeeArr = res.map((employee) => {
+        employeeList = res.map((employee) => {
             return {
                 name: employee.first_name + " " +employee.last_name,
-                value: employee.id
+                id: employee.id,
             }
         });
-        console.log(employeeArr);
+        console.log(employeeList);
+        inquirer.prompt([
+            //question 1: Which employee?
+            {
+                type: "list",
+                name: "employeeName",
+                message: "Which employee do you want to his/her role to change to?",
+                choices: () =>{
+                    let nameList = employeeList.map((employee) => {
+                        return employee.name;
+                    });
+                    return nameList;
+                }
+            },
+            //question 2: What role?
+            {
+                type: "list",
+                name: "role",
+                message: "What Role do you want to change that Employee to?",
+                choices: () => {
+                    let roleList = [];
+                    db.query("SELECT * FROM role", (err, res) => {
+                        if(err) throw err;
+                        roleList = res.map((role) => {
+                            return role.title;
+                        });
+                    });
+                    return roleList;
+                }
+            },
+        ])
+        .then((res) => {
+            let roleList = [];
+                db.query("SELECT * FROM role", (err, res) => {
+                    roleList = res.map((role) => {
+                        return role.title;
+                    });
+                    console.log(roleList);
+                    return roleList;
+            });
+            let roleId = roleList.indexOf(res.role) + 1;
+            const sql = `UPDATE employee SET WHERE ?`
+            db.query(sql, {last_name: res.name.split(" ")[1]}, {roleId: roleId}, (err, results) => {
+                console.table(res)
+            })
+        });
     })
 
     //list provide list of employee to user if hte user select one,
@@ -187,4 +251,6 @@ function intro(){
     `)
 }
 
-updateEmployee();
+//updateEmployee();
+//addRole();
+initalPrompt();
