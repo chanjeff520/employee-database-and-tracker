@@ -25,7 +25,8 @@ function initalPrompt(){
                 "View All Employees",
                 "Add Department",
                 "Add Role",
-                "Add Employee"
+                "Add Employee",
+                "Update Employee Role"
             ]
         }
     ]).then((res) => {
@@ -46,6 +47,9 @@ function initalPrompt(){
                 break;
 
             case "Add Employee": addEmployee();
+                break;
+
+            case "Update Employee Role": updateEmployees();
                 break;
         }
     });
@@ -111,7 +115,7 @@ function addDepartment(){
 }
 
 //add a role
-function addRole(title, salary, departmentId){
+function addRole(){
     inquirer.prompt([
         {
             type: "input",
@@ -144,22 +148,40 @@ function addRole(title, salary, departmentId){
 }
 
 //add an empolyee
-function addEmployee(firstName, LastName, roleId, departmentId){
+function addEmployee(){
 
     inquirer.prompt([
         {
-            type: "",
+            type: "input",
+            message: "Input the first name of the new employee",
+            name: "firstName"
+        },
+        {
+            type: "input",
+            message: "Input the last name of the new employee",
+            name: "lastName"
+        },
+        {
+            type: "input",
+            message: "Input the roleID of the employee",
+            name: "roleId"
+        },
+        {
+            type: "input",
+            message: "Input the Manager of the employee. If none put 'NULL'.",
+            name: "managerId"
         }
     ])
-
-    const values = firstName + ", " + LastName + ", " + roleId + ", " + departmentId;
-    const sql = 'INSERT INTO employee(first_name , last_name, role_id, department_id) VALUES (?);';
-    db.query(sql, values, (err,res) => {
-        if (err){
-            console.log("New Department was not added.")
-            throw err;
-        }
+    .then((res) => {
+        const sql =`INSERT INTO employee(first_name , last_name, role_id, manager_id) VALUES ("${res.firstName}","${res.lastName}", ${res.roleId}, ${res.managerId});`;
+        db.query(sql, (err,res) => {
+            if (err){
+                console.log("New employee was not added.")
+                throw err;
+            }
         console.log("New employee has been added.");
+        initalPrompt();
+        });
     });
 }
 
